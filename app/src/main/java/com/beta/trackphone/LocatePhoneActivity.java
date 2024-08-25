@@ -47,24 +47,36 @@ public class LocatePhoneActivity extends FragmentActivity implements OnMapReadyC
     private final int MIN_DISTANCE = 1;
     Marker myMarker;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityLocatePhoneBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+    // سيتم استخدام هذا لعرض موقع الهاتف إذا تم تفعيل Lost Phone Mode
 
-        manager = (LocationManager)getSystemService(LOCATION_SERVICE);
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    binding = ActivityLocatePhoneBinding.inflate(getLayoutInflater());
+    setContentView(binding.getRoot());
 
+    manager = (LocationManager)getSystemService(LOCATION_SERVICE);
+    auth = FirebaseAuth.getInstance();
+    user = auth.getCurrentUser();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.loc_map);
-        mapFragment.getMapAsync(this);
-        reference = FirebaseDatabase.getInstance().getReference().child("Users");
-        readChanges();
+    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+            .findFragmentById(R.id.loc_map);
+    mapFragment.getMapAsync(this);
+    reference = FirebaseDatabase.getInstance().getReference().child("Users");
+    readChanges();
+
+    // إذا تم تفعيل Lost Phone Mode
+    if (isLostModeActivated) {
+        activateLostPhoneModeOnMap();
     }
+}
+
+private void activateLostPhoneModeOnMap() {
+    // منطق تحديث الخريطة لتحديد موقع الهاتف
+    Toast.makeText(this, "Lost Phone Mode Activated on Map", Toast.LENGTH_LONG).show();
+    // عرض موقع الهاتف الحالي
+}
+    
 
     private void readChanges()
     {
