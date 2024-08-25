@@ -15,14 +15,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        Person.onCreate(db);
-    }
+    // تحديث قاعدة البيانات لتخزين حالة الهاتف (Lost أو Stolen)
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Person.onUpgrade(db, oldVersion, newVersion);
-    }
+@Override
+public void onCreate(SQLiteDatabase db) {
+    // إضافة عمود جديد لتخزين حالة الهاتف
+    String ALTER_TABLE = "ALTER TABLE " + "Users" + " ADD COLUMN " + "phoneStatus" + " TEXT";
+    db.execSQL(ALTER_TABLE);
+    Person.onCreate(db);
+}
+
+@Override
+public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    Person.onUpgrade(db, oldVersion, newVersion);
+}
 
 }
